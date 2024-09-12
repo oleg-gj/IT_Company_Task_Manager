@@ -13,24 +13,24 @@ class Project(models.Model):
 
 class Position(models.Model):
     name = models.CharField(max_length=100)
+    workers = models.ManyToManyField("Worker", related_name="positions")
 
     def __str__(self):
         return self.name
 
 
 class Worker(AbstractUser):
-    position = models.ForeignKey(Position, on_delete=models.CASCADE)
-    team = models.ForeignKey("Team", on_delete=models.CASCADE)
 
     def __str__(self):
         return (
-            f"User:{self.username} Position({self.position}) Team({self.team})"
+            f"User:{self.username}"
         )
 
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    workers = models.ManyToManyField(Worker)
 
     def __str__(self):
         return f"{self.name} ({self.project})"
