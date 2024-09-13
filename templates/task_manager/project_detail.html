@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Project: {{ project }}
+    <a href="{% url 'task_manager:project-delete' pk=project.id %}" class="btn btn-danger link-to-page">
+      Delete
+    </a>
+
+    <a href="{% url 'task_manager:project-update' pk=project.id %}" class="btn btn-secondary link-to-page">
+      Update
+    </a>
+  </h1>
+  <h1>
+    Tasks
+  </h1>
+  <hr>
+  <ul>
+    {% for task in project.tasks.all %}
+      <li>{{ task.name }} ({{ task.priority }} {{ task.task_type }})</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

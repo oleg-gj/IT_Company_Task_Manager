@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Project list
+    <a href="{% url "task_manager:project-create"%}" class="btn btn-primary link-to-page">
+      Create
+    </a>
+  </h1>
+
+  {% if project_list %}
+    <ul>
+      {% for project in project_list %}
+        <li>
+          <a href="{% url "task_manager:project-detail" pk=project.id %}">
+            {{ project.name }} ({{ project.tasks.name }})
+          </a>
+          
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no project</p>
+  {% endif %}
+{% endblock %}
