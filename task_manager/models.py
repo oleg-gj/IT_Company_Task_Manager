@@ -29,11 +29,15 @@ class Worker(AbstractUser):
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    workers = models.ManyToManyField(Worker)
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name="teams"
+    )
+    workers = models.ManyToManyField(Worker, related_name="teams")
 
     def __str__(self):
-        return f"{self.name} ({self.project})"
+        return self.name
 
 
 class TaskType(models.Model):
@@ -44,13 +48,27 @@ class TaskType(models.Model):
 
 
 class Task(models.Model):
+    PRIORITY_CHOICES = (
+        ("Urgent", "Urgent"),
+        ("Low", "Low"),
+        ("Medium", "Medium"),
+        ("High", "High"),
+    )
     name = models.CharField(max_length=100)
     description = models.TextField()
     deadline = models.DateTimeField()
     is_complete = models.BooleanField(default=False)
-    priority = models.TextChoices("Urgent", "Low", "Medium", "High")
-    task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
+    priority = models.CharField(
+        choices=PRIORITY_CHOICES,
+        default="Urgent",
+        max_length=6
+    )
+    task_type = models.ForeignKey(
+        TaskType,
+        on_delete=models.CASCADE,
+        related_name="tasks"
+    )
     assigned_to = models.ManyToManyField(Worker, related_name="tasks")
 
     def __str__(self):
-        return f"Task: {self.name} is complete {self.is_complete} "
+        return self.name
