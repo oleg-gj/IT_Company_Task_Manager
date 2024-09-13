@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Team: {{ team }}
+    <a href="{% url 'task_manager:team-delete' pk=team.id %}" class="btn btn-danger link-to-page">
+      Delete
+    </a>
+
+    <a href="{% url 'task_manager:team-update' pk=team.id %}" class="btn btn-secondary link-to-page">
+      Update
+    </a>
+  </h1>
+  <p>Project: {{ team.project.name }}</p>
+  <h1>
+    Workers
+  </h1>
+  <hr>
+  <ul>
+    {% for worker in team.workers.all %}
+      <li>{{ worker.username }} ({{ worker.first_name }} {{ worker.last_name }})</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
