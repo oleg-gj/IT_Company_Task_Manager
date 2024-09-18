@@ -22,24 +22,15 @@ class Position(models.Model):
 
 class Worker(AbstractUser):
     def get_absolute_url(self):
-        return reverse(
-            "task_manager:worker-detail",
-            kwargs={"pk": self.pk}
-        )
+        return reverse("task_manager:worker-detail", kwargs={"pk": self.pk})
 
     def __str__(self):
-        return (
-            f"User:{self.username}"
-        )
+        return f"User:{self.username}"
 
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
-    project = models.ForeignKey(
-        Project,
-        on_delete=models.CASCADE,
-        related_name="teams"
-    )
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="teams")
     workers = models.ManyToManyField(Worker, related_name="teams")
 
     def __str__(self):
@@ -65,14 +56,10 @@ class Task(models.Model):
     deadline = models.DateTimeField()
     is_complete = models.BooleanField(default=False)
     priority = models.CharField(
-        choices=PRIORITY_CHOICES,
-        default="Urgent",
-        max_length=6
+        choices=PRIORITY_CHOICES, default="Urgent", max_length=6
     )
     task_type = models.ForeignKey(
-        TaskType,
-        on_delete=models.CASCADE,
-        related_name="tasks"
+        TaskType, on_delete=models.CASCADE, related_name="tasks"
     )
     assigned_to = models.ManyToManyField(Worker, related_name="tasks")
 

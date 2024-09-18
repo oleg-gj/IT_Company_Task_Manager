@@ -9,10 +9,11 @@ from task_manager.forms import (
     WorkerNameSearchForm,
     WorkerCreationForm,
     WorkerUpdateForm,
-    TaskUpdateForm
+    TaskUpdateForm,
 )
 
 from task_manager.models import Team, Project, Worker, Task, TaskType, Position
+
 
 @login_required
 def index(request):
@@ -32,11 +33,7 @@ def index(request):
         "num_visits": num_visits + 1,
     }
 
-    return render(
-        request,
-        "task_manager/index.html",
-        context=context
-    )
+    return render(request, "task_manager/index.html", context=context)
 
 
 class TeamListView(LoginRequiredMixin, generic.ListView):
@@ -130,8 +127,7 @@ class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
     form_class = WorkerUpdateForm
 
     def get_success_url(self, **kwargs):
-        return reverse("task_manager:worker-detail",
-                       kwargs={'pk': self.kwargs['pk']})
+        return reverse("task_manager:worker-detail", kwargs={"pk": self.kwargs["pk"]})
 
 
 class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
@@ -147,9 +143,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         context = super(TaskListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
         context["name"] = name
-        context["search_form"] = TaskNameSearchForm(
-            initial={"name": name}
-        )
+        context["search_form"] = TaskNameSearchForm(initial={"name": name})
         return context
 
     def get_queryset(self):
@@ -157,9 +151,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         form = TaskNameSearchForm(self.request.GET)
 
         if form.is_valid():
-            queryset = queryset.filter(
-                name__icontains=form.cleaned_data["name"]
-            )
+            queryset = queryset.filter(name__icontains=form.cleaned_data["name"])
         return queryset
 
 
